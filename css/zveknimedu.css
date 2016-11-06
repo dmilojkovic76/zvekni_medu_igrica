@@ -5,11 +5,11 @@
     text-align: center;
     position: absolute;
     left: 50%;
-    transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
     -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     font-family: helvetica, arial, sans-serif;
     text-transform: uppercase;
     font-weight: 900;
@@ -26,11 +26,11 @@
     height: 15px;
     background: rgb(214, 214, 214);
     position: absolute;
-    animation: cssload-load 1.12s infinite alternate ease-in-out;
     -o-animation: cssload-load 1.12s infinite alternate ease-in-out;
     -ms-animation: cssload-load 1.12s infinite alternate ease-in-out;
     -webkit-animation: cssload-load 1.12s infinite alternate ease-in-out;
     -moz-animation: cssload-load 1.12s infinite alternate ease-in-out;
+    animation: cssload-load 1.12s infinite alternate ease-in-out;
 }
 
 .cssload-loader::before {
@@ -172,23 +172,24 @@
     pointer-events: none;
 }
 
-#level {
+.level {
     left: 42%;
     text-align: center;
     top: 2rem;
     position: absolute;
 }
 
-#hiscore {
+.hiscore {
     cursor: pointer;
     pointer-events: auto;
 }
 
-#hiscore:hover {
+.hiscore:hover {
     text-decoration: underline;
 }
 
-#resetScore {
+.resetScore {
+    background-color: rgb(11, 67, 101);
     background-color: rgba(11, 67, 101, 0.9);
     border: 0.2rem solid white;
     border-radius: 1rem;
@@ -202,8 +203,9 @@
 }
 
 .krajigre {
+    background-color: rgb(11, 67, 101);
     background-color: rgba(11, 67, 101, 0.9);
-    padding: 6rem 0rem;
+    padding: 6rem 0;
     font-size: 2rem;
     border-radius: 2rem;
     border: 0.2rem solid white;
@@ -291,11 +293,11 @@
         font-size: 1.2rem;
         height: 2.7rem;
     }
-    #level {
+    .level {
         top: inherit;
         position: inherit;
     }
-    #resetScore {
+    .resetScore {
         top: 3rem;
         right: 2rem;
     }
@@ -323,11 +325,11 @@
         height: 3rem;
         width: 3.5rem;
     }
-    #level {
+    .level {
         top: inherit;
         position: inherit;
     }
-    #resetScore {
+    .resetScore {
         top: 3rem;
         right: 3rem;
     }
@@ -355,11 +357,11 @@
         top: 4rem;
         width: 4.5rem;
     }
-    #level {
+    .level {
         top: inherit;
         position: inherit;
     }
-    #resetScore {
+    .resetScore {
         top: 5rem;
         right: 3rem;
     }
@@ -387,11 +389,11 @@
         top: 5rem;
         width: 5rem;
     }
-    #level {
+    .level {
         top: inherit;
         position: inherit;
     }
-    #resetScore {
+    .resetScore {
         top: 6rem;
         right: 7rem;
     }
@@ -419,11 +421,11 @@
         top: 5rem;
         width: 5rem;
     }
-    #level {
+    .level {
         top: inherit;
         position: inherit;
     }
-    #resetScore {
+    .resetScore {
         top: 7rem;
         right: 10rem;
     }

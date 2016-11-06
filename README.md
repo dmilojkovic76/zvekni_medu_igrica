@@ -1,4 +1,16 @@
-# zvekni_medu_igrica
+<!--
+@Author: Dušan Milojković <dmilojkovic76>
+@Date:   2016-11-05T22:36:16+01:00
+@Email:  dmilojkovic76@gmail.com
+@Project: Zvekni Medu
+@Last modified by:   dmilojkovic76
+@Last modified time: 2016-11-06T18:32:33+01:00
+@License: Copyright (c) 2016, Dušan Milojković. All rights reserved.
+-->
+
+
+
+# Zvekni Medu igrica
 Jednostavna JavaScript igrica uradjena kao projekat provežbavanja kodiranja u HTML5 standardu.
 
 Osnovni zadatak je bio da se napravi funkcionalna igrica samo uz pomoć __HTML elemenata, JavaScript-a i CSS-a__.

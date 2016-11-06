@@ -1,17 +1,15 @@
-/*!
- * VERSION: 1.0
- * DATE: 2016-11-5
- * UPDATES AND DOCS AT: http://greensock.com
- *
- * @licence Copyright (c) 2016, Dušan Milojković. All rights reserved.
- * This work is subject to the terms .......
- *
- * @author: Dušan Milojković, dmilojkovic76@gmail.com
+/*
+ * @Author: Dušan Milojković, dmilojkovic76@gmail.com
+ * @Date:   2016-09-27 12:52:56
+ * @Last modified by:   dmilojkovic76
+ * @Last modified time: 2016-11-06T18:58:27+01:00
+ * @licence: Copyright (c) 2016, Dušan Milojković. All rights reserved.
  */
+
 /*jslint browser: true*/
 /*global $, alert, Audio, TweenLite*/
 
-$(document).ready(function () {
+$(document).ready(function() {
     "use strict";
 
     var sistem = navigator.appVersion,
@@ -41,7 +39,7 @@ $(document).ready(function () {
         debug = false;
 
     // Loop f-ja za stalni update dimenzija igrice ali samo brzinom koju browser moze da podnese
-    var mainDebug = function () {
+    var mainDebug = function() {
         if (debug) {
             $("#debugDiv").removeClass("hidden");
             $("#debugData").text("Width: " + WIDTH + " | Height: " + HEIGHT + " | poen: " + poen);
@@ -147,7 +145,7 @@ $(document).ready(function () {
 
     // Glavna f-ja za animaciju i bodovanje pri svakom kliku na lika
     function medaClick() {
-        return function () {
+        return function() {
             var meda = $(this),
                 zvek = $(".zvek"),
                 kliknutoy = parseFloat(meda.css("top")),
@@ -176,7 +174,7 @@ $(document).ready(function () {
             meda.css("background-image", medaJoj);
             TweenLite.to(meda, 0.2, {
                 "top": "100%",
-                onComplete: function () {
+                onComplete: function() {
                     score += poen;
                     if (speed > 100) {
                         speed -= 100;
@@ -202,7 +200,7 @@ $(document).ready(function () {
 
                     TweenLite.to(meda, speed / 1000, {
                         "top": "0%",
-                        onComplete: function () {
+                        onComplete: function() {
                             meda.css({
                                 "background-image": medaVrh
                             });
@@ -249,7 +247,7 @@ $(document).ready(function () {
         });
         TweenLite.to(".meda", speed / 1000, {
             "top": "0%",
-            onComplete: function () {
+            onComplete: function() {
                 $(this).css({
                     "background-image": medaVrh
                 });
@@ -260,7 +258,7 @@ $(document).ready(function () {
     }
 
     // Klik event za uklj/isklj pozadinske muzike
-    $(".zvukOnOff").click(function () {
+    $(".zvukOnOff").click(function() {
         if (sviraMuzika) {
             if (audioSistem) {
                 bgAudio.pause();
@@ -275,14 +273,14 @@ $(document).ready(function () {
     });
 
     // klik event za kraj partije
-    $(".iskljuci").click(function () {
+    $(".iskljuci").click(function() {
         if (igranje) {
             krajIgre();
         }
     });
 
     // klik event za prikaz menija za reset rekorda
-    $("#hiscore").click(function () {
+    $("#hiscore").click(function() {
         if (hasStorage) {
             $("#resetScore").css({
                 'visibility': 'visible'
@@ -291,7 +289,7 @@ $(document).ready(function () {
     });
 
     // klik event za resetovanje rekorda
-    $('#obrisi').click(function () {
+    $('#obrisi').click(function() {
         if (hasStorage) {
             localStorage.score = 0;
             highScore = 0;
@@ -303,35 +301,35 @@ $(document).ready(function () {
     });
 
     // klik event za odustajanje od reseta rekorda
-    $('#nemoj').click(function () {
+    $('#nemoj').click(function() {
         $("#resetScore").css({
             'visibility': 'hidden'
         });
     });
 
     // Slede klik eventi za navigaciju pre igrice
-    $("#home-b").click(function () {
+    $("#home-b").click(function() {
         $("#features-b, #contact-b").removeClass("active");
         $("#home-b").addClass("active");
         $("#intro-c").removeClass("hidden");
         $("#game, #features-c, #contact-c").addClass("hidden");
     });
 
-    $("#features-b").click(function () {
+    $("#features-b").click(function() {
         $("#home-b, #contact-b").removeClass("active");
         $("#features-b").addClass("active");
         $("#features-c").removeClass("hidden");
         $("#intro-c, #game, #contact-c").addClass("hidden");
     });
 
-    $("#contact-b").click(function () {
+    $("#contact-b").click(function() {
         $("#home-b, #features-b").removeClass("active");
         $("#contact-b").addClass("active");
         $("#contact-c").removeClass("hidden");
         $("#intro-c, #game, #features-c").addClass("hidden");
     });
 
-    $("#start-b").click(function () {
+    $("#start-b").click(function() {
         $("#intro-c").toggleClass("hidden");
         $("#game").toggleClass("hidden");
         $("#header, #footer").addClass("hidden");
@@ -343,7 +341,7 @@ $(document).ready(function () {
     });
 
     // klik event za pocetak nove partije
-    $("#novaIgra").click(function () {
+    $("#novaIgra").click(function() {
         pocniIgru();
         $("#krajigre").css({
             "visibility": "hidden"
@@ -351,7 +349,7 @@ $(document).ready(function () {
     });
 
     // klik event za prekid igranja i povracaj na startnu stranu
-    $("#izlaz").click(function () {
+    $("#izlaz").click(function() {
         if (audioSistem) {
             bgAudio.pause();
             bgAudio.currentTime = 0;
@@ -374,11 +372,11 @@ $(document).ready(function () {
     });
 
     // klik event za proveru ispravnosti podataka na strani za kontakt
-    $("#submit-b").click(function () {
+    $("#submit-b").click(function() {
         var ime = $("#ime").val(),
             email = $("#email").val(),
             poruka = $("#tekst-poruke"),
-            name_regex = /^[a-zA-Z]+$/,
+            name_regex = /^[a-zA-Z\s]+$/,
             email_regex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
 
         // Proverava da li su sva polja popunjena.
