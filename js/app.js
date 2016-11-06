@@ -33,12 +33,14 @@ $(document).ready(function () {
         krajZvukFile = "sound/sad_trombone.ogg",
         zvekZvukFile = "sound/smack.ogg",
         levelZvukFile = "sound/levelup.ogg",
+        audioSistem = false,
         medaOk = 'url("img/meda1.png")',
         medaJoj = 'url("img/meda2.png")',
         medaVrh = 'url("img/meda3.png")',
         poen = 0,
         debug = false;
 
+    // Loop f-ja za stalni update dimenzija igrice ali samo brzinom koju browser moze da podnese
     var mainDebug = function () {
         if (debug) {
             $("#debugDiv").removeClass("hidden");
@@ -53,49 +55,82 @@ $(document).ready(function () {
     //    window.setTimeout(mainDebug, 500);
     window.requestAnimationFrame(mainDebug);
 
+    ucitavanje();
+
+    // Provera da li je moguce snimiti rekorde u browser local storage
     try {
         localStorage.setItem("test", "test");
         localStorage.removeItem("test");
-        hasStorage = true;
         if (!localStorage.score) {
-            highScore = 0;
-        } else {
-            highScore = parseInt(localStorage.score, 10);
+            localStorage.score = 0;
         }
+        highScore = parseInt(localStorage.score, 10);
+        hasStorage = true;
     } catch (e) {
         hasStorage = false;
-        alert(e);
+        alert("Local Storage nije omogućen! Došlo je do sledeće greške: " + e);
     }
 
-    ucitavanje();
-
+    // F-ja za ucitavanje zvukova i upite sistemu i browseru pre pocetka igrice
     function ucitavanje() {
 
+        // Ovaj IF blok mi je nepotreban ali neka ga kao podsetnik za mozda nesto kasnije
         if (sistem.match("Android")) {
             $(".cssload-loader").text("Android Loading...");
         } else {
             $(".cssload-loader").text("Loading...");
         }
 
-        bgAudio = new Audio(pozadinaAudioFile);
-        krajZvuk = new Audio(krajZvukFile);
-        zvekZvuk = new Audio(zvekZvukFile);
-        levelZvuk = new Audio(levelZvukFile);
+        try {
+            bgAudio = new Audio(pozadinaAudioFile);
+            bgAudio.currentTime = 0;
+            krajZvuk = new Audio(krajZvukFile);
+            krajZvuk.currentTime = 0;
+            zvekZvuk = new Audio(zvekZvukFile);
+            zvekZvuk.currentTime = 0;
+            levelZvuk = new Audio(levelZvukFile);
+            levelZvuk.currentTime = 0;
+            audioSistem = true;
+        } catch (e) {
+            audioSistem = false;
+            alert("Greška pri učitavanju. Audio reprodukcija neće biti moguća zbog: " + e);
+        }
 
         $(".cssload-loader").addClass("hidden");
         $("#intro-c").removeClass("hidden");
     }
 
+    // Generise nasumicne pozicije izmedju 5% i 80%
     function randMedaPos() {
         return +(5 + Math.floor(Math.random() * 75)) + "%";
     }
 
+    // F-ja za audio.play() sa proverama i kontrolom greske
+    function pustiZvuk(zvuk) {
+        if (audioSistem) {
+            try {
+                zvuk.play();
+            } catch (e) {
+                alert("Greška sa audio reprodukcijom u pustiZvuk(" + zvuk + "): " + e);
+            }
+        }
+    }
+
+    // Podesava sve sto treba kada se trenutna partija zavrsi
     function krajIgre() {
         TweenLite.killTweensOf($(".meda"));
-        bgAudio.pause();
+        if (audioSistem) {
+            try {
+                if (sviraMuzika) {
+                    bgAudio.pause();
+                }
+                bgAudio.currentTime = 0;
+                pustiZvuk(krajZvuk);
+            } catch (e) {
+                alert("Greška sa audio reprodukcijom u krajIgre(): " + e);
+            }
+        }
         sviraMuzika = false;
-        bgAudio.currentTime = 0;
-        krajZvuk.play();
         igranje = false;
         $("#krajigre").css({
             "visibility": "visible"
@@ -110,6 +145,7 @@ $(document).ready(function () {
         $("#hiscore").text("Rekord: " + highScore);
     }
 
+    // Glavna f-ja za animaciju i bodovanje pri svakom kliku na lika
     function medaClick() {
         return function () {
             var meda = $(this),
@@ -119,7 +155,7 @@ $(document).ready(function () {
             // poen je promenljiv: (visina:100% = trenutno:x% => x% = (trenutno*100%)/visina) * 1.level
             poen = Math.floor(((HEIGHT - kliknutoy) * 100) / (HEIGHT) * (1 + (level / 10)));
 
-            zvekZvuk.play();
+            pustiZvuk(zvekZvuk);
 
             zvek.css({
                 "top": kliknutoy,
@@ -141,15 +177,6 @@ $(document).ready(function () {
             TweenLite.to(meda, 0.2, {
                 "top": "100%",
                 onComplete: function () {
-                    //                        meda.css({
-                    //                            "background-image": medaVrh
-                    //                        });
-                    //                        krajIgre();
-                    //                    }
-                    //                });
-                    //            meda.stop(true, false).animate({
-                    //                "top": "100%"
-                    //            }, 200, function () {
                     score += poen;
                     if (speed > 100) {
                         speed -= 100;
@@ -161,7 +188,7 @@ $(document).ready(function () {
 
                     if (speed % 1000 === 0) {
                         level += 1;
-                        levelZvuk.play();
+                        pustiZvuk(levelZvuk);
                         score += 200;
                         $("#level").text("Nivo: " + level);
                     }
@@ -187,6 +214,7 @@ $(document).ready(function () {
         };
     }
 
+    // Podesava sve potrebne parametre pre pocetka svake partije
     function pocniIgru() {
         $("#krajigre").css({
             "visibility": "hidden"
@@ -200,7 +228,7 @@ $(document).ready(function () {
         speed = 10000;
         level = 1;
         if (!sviraMuzika) {
-            bgAudio.play();
+            pustiZvuk(bgAudio);
             sviraMuzika = true;
         }
         $("#score").text("Rezultat: " + score);
@@ -231,22 +259,29 @@ $(document).ready(function () {
         $(".meda").click(medaClick());
     }
 
+    // Klik event za uklj/isklj pozadinske muzike
     $(".zvukOnOff").click(function () {
         if (sviraMuzika) {
-            bgAudio.pause();
+            if (audioSistem) {
+                bgAudio.pause();
+            }
             sviraMuzika = false;
+            $(this).removeClass('glyphicon glyphicon-volume-off').addClass('glyphicon glyphicon-volume-up');
         } else if (!sviraMuzika && igranje) {
-            bgAudio.play();
+            pustiZvuk(bgAudio);
             sviraMuzika = true;
+            $(this).removeClass('glyphicon glyphicon-volume-up').addClass('glyphicon glyphicon-volume-off');
         }
     });
 
+    // klik event za kraj partije
     $(".iskljuci").click(function () {
         if (igranje) {
             krajIgre();
         }
     });
 
+    // klik event za prikaz menija za reset rekorda
     $("#hiscore").click(function () {
         if (hasStorage) {
             $("#resetScore").css({
@@ -255,6 +290,7 @@ $(document).ready(function () {
         }
     });
 
+    // klik event za resetovanje rekorda
     $('#obrisi').click(function () {
         if (hasStorage) {
             localStorage.score = 0;
@@ -266,12 +302,14 @@ $(document).ready(function () {
         });
     });
 
+    // klik event za odustajanje od reseta rekorda
     $('#nemoj').click(function () {
         $("#resetScore").css({
             'visibility': 'hidden'
         });
     });
 
+    // Slede klik eventi za navigaciju pre igrice
     $("#home-b").click(function () {
         $("#features-b, #contact-b").removeClass("active");
         $("#home-b").addClass("active");
@@ -304,6 +342,7 @@ $(document).ready(function () {
         pocniIgru();
     });
 
+    // klik event za pocetak nove partije
     $("#novaIgra").click(function () {
         pocniIgru();
         $("#krajigre").css({
@@ -311,10 +350,13 @@ $(document).ready(function () {
         });
     });
 
+    // klik event za prekid igranja i povracaj na startnu stranu
     $("#izlaz").click(function () {
-        bgAudio.pause();
+        if (audioSistem) {
+            bgAudio.pause();
+            bgAudio.currentTime = 0;
+        }
         sviraMuzika = false;
-        bgAudio.currentTime = 0;
         $("#krajigre").css({
             "visibility": "hidden"
         });
@@ -331,6 +373,7 @@ $(document).ready(function () {
         });
     });
 
+    // klik event za proveru ispravnosti podataka na strani za kontakt
     $("#submit-b").click(function () {
         var ime = $("#ime").val(),
             email = $("#email").val(),
@@ -368,7 +411,7 @@ $(document).ready(function () {
         $("#p2").removeClass("hidden").addClass("hidden").text("");
         $("#ime").removeClass("has-error");
         $("#email").removeClass("has-error");
-        alert("Poruka je uspešno poslata!");
+        alert("Poruka je uspešno poslata sistemu! Hvala!");
         return true;
     });
 
