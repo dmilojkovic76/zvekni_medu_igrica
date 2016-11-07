@@ -424,9 +424,6 @@ $(document).ready(function() {
         }
     }
 
-    // klik event za proveru ispravnosti podataka na strani za kontakt
-    $("#submit-b").click(submitKlik());
-
     $("#ime").keyup(function(event) {
         ime = $("#ime").val();
         if (event.which === 13) {
@@ -465,6 +462,7 @@ $(document).ready(function() {
         $("#submit-b")
             .val("Sačekajte...")
             .attr('disabled', 'disabled');
+            submitKlik();
 
         return true;
     });
