@@ -36,7 +36,12 @@ $(document).ready(function() {
         medaJoj = 'url("img/meda2.png")',
         medaVrh = 'url("img/meda3.png")',
         poen = 0,
-        debug = false;
+        debug = false,
+        ime = $("#ime").val(),
+        email = $("#email").val(),
+        poruka = $("#tekst-poruke"),
+        name_regex = /^[a-z\s]+$/,
+        email_regex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
 
     // Loop f-ja za stalni update dimenzija igrice ali samo brzinom koju browser moze da podnese
     var mainDebug = function() {
@@ -371,45 +376,96 @@ $(document).ready(function() {
         });
     });
 
-    // klik event za proveru ispravnosti podataka na strani za kontakt
-    $("#submit-b").click(function() {
-        var ime = $("#ime").val(),
-            email = $("#email").val(),
-            poruka = $("#tekst-poruke"),
-            name_regex = /^[a-zA-Z\s]+$/,
-            email_regex = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
-
-        // Proverava da li su sva polja popunjena.
+    // Proverava da li su sva polja popunjena.
+    function valSvaPolja() {
         if (ime.length === 0 || email.length === 0 || poruka.length === 0) {
-            $("#head").removeClass("hidden").text("* Sva polja su obavezna! Pokušajte ponovo! *");
-            $("#ime").addClass("has-error").focus();
+            $("#head").removeClass("hidden");
             return false;
         } else {
-            $("#head").removeClass("hidden").addClass("hidden").text("");
-            $("#p1").removeClass("hidden").addClass("hidden").text("");
-            $("#p2").removeClass("hidden").addClass("hidden").text("");
-            $("#ime").removeClass("has-error");
-            $("#email").removeClass("has-error");
+            $("#head, #p1, #p2").addClass("hidden");
+            $("#ime, #email").removeClass("has-error");
+            return true;
         }
-        // Provera validnosti imena.
-        if (!ime.match(name_regex) || ime.length === 0) {
-            $("#p1").removeClass("hidden").text("* Molio bih vas da koristite samo slova prilikom unosa vašeg imena. *");
-            $("#ime").addClass("has-error").focus();
-            return false;
-        }
-        // Provera validnosti emaila.
-        if (!email.match(email_regex) || email.length === 0) {
-            $("#p2").removeClass("hidden").text("* Molio bih vas da unesete ispravnu email adresu. *");
-            $("#email").addClass("has-error").focus();
-            return false;
-        }
+    }
 
-        $("#head").removeClass("hidden").addClass("hidden").text("");
-        $("#p1").removeClass("hidden").addClass("hidden").text("");
-        $("#p2").removeClass("hidden").addClass("hidden").text("");
-        $("#ime").removeClass("has-error");
-        $("#email").removeClass("has-error");
-        alert("Poruka je uspešno poslata sistemu! Hvala!");
+    // Provera validnosti imena.
+    function valIme() {
+        if (!ime.match(name_regex) || ime.length === 0) {
+            $("#p1").removeClass("hidden");
+            $("#ime").addClass("has-error");
+            return false;
+        } else {
+            $("#p1").addClass("hidden");
+            $("#ime").removeClass("has-error");
+            return true;
+        }
+    }
+
+    // Provera validnosti emaila.
+    function valEmail() {
+        if (!email.match(email_regex) || email.length === 0) {
+            $("#p2").removeClass("hidden");
+            $("#email").addClass("has-error");
+            return false;
+        } else {
+            $("#p2").addClass("hidden");
+            $("#email").removeClass("has-error");
+            return true;
+        }
+    }
+
+    function submitKlik() {
+        if (valSvaPolja() && valIme() && valEmail()) {
+            $("#head, #p1, #p2").addClass("hidden");
+            $("#ime, #email").removeClass("has-error");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // klik event za proveru ispravnosti podataka na strani za kontakt
+    $("#submit-b").click(submitKlik());
+
+    $("#ime").keyup(function(event) {
+        ime = $("#ime").val();
+        if (event.which === 13) {
+            submitKlik()
+        } else {
+            valIme();
+        }
+    });
+
+    $("#ime").on('blur', function(event) {
+        valIme();
+    });
+
+    $("#email").keyup(function(event) {
+        email = $("#email").val();
+        if (event.which === 13) {
+            submitKlik()
+        } else {
+            valEmail();
+        }
+    });
+
+    $("#email").on('blur', function(event) {
+        valEmail();
+    });
+
+    $("#tekst-poruke").keyup(function(event) {
+        if (event.which === 13) {
+            event.preventDefault();
+            submitKlik()
+        }
+    });
+
+    // Prilikom operacije slanja blokiraj dugme za slanje
+    $('#kontakt_form').submit(function() {
+        $("#submit-b")
+            .val("Sačekajte...")
+            .attr('disabled', 'disabled');
+
         return true;
     });
 

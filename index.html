@@ -97,7 +97,7 @@
                         <p class="lead">Mala igrica urađena kao projekat provežbavanja kodiranja u</p>
                         <a href="https://en.wikipedia.org/wiki/HTML5" class="lead">HTML5<img src="img/logo-html.png"></a>standardu.
                         <p></p>
-                        <p>Osnovni zadatak je bio da se napravi funkcionalna igrica samo uz pomoć <a href="https://en.wikipedia.org/wiki/HTML">HTML elemenata</a>, <a href="http://www.w3schools.com/js/js_intro.asp"> JavaScript-a <img src="img/logo-js.png"></a> i <a href="http://www.w3schools.com/css/css3_intro.asp"> CSS-a <img src="img/logo-css3.png"></a></p>
+                        <p>Osnovni zadatak je bio da se napravi funkcionalna igrica samo uz pomoć <a href="https://en.wikipedia.org/wiki/HTML">HTML elemenata</a>, <a href="http://www.w3schools.com/js/js_intro.asp"> JavaScript-a <img src="img/logo-js.png"></a>                            i <a href="http://www.w3schools.com/css/css3_intro.asp"> CSS-a <img src="img/logo-css3.png"></a></p>
                         <p>Da bi strana imala dinamičnost i automatski se adaptirala raznim veličinama ekrana ili browsera, korišćen je <a href="http://getbootstrap.com/">Bootstrap 3.3.7 <img src="img/logo-bootstrap.png"></a></p>
                         <p>Za lakšu interakciju sa DOM-om korišćen je <a href="http://jquery.com/">JQuery 3.1.0 <img src="img/logo-jquery.png"></a></p>
                         <p>Za brze animacije umesto jQuery.animate() korišćen je GreenSock-ov <a href="http://greensock.com/">GSAP 1.19.0 <img src="img/logo-greensock.svg"></a></p>
@@ -106,39 +106,38 @@
 
                     <div id="contact-c" class="hidden">
                         <h1 class="cover-heading">Kontakt strana</h1>
-                        <p>Možete iskoristiti ovaj formular da mi ostavite poruku:</p>
-                        <p> A ako nemate podešen email program, možete mi poslati email na:
-                            <br />
-                            <u>dmilojkovic76 et gmail tačka com</u></p>
-
+                        <p>Poruku možete poslati na: <u>dmilojkovic76 et gmail tačka com</u></p>
                         <div id="form">
                             <p id="head" class="alert alert-danger hidden" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                <span class="sr-only">Greška:</span>
+                                <span class="sr-only">Greška:</span><span id="headErr">* Sva polja su obavezna! *</span>
                             </p>
-                            <form action="MAILTO:dmilojkovic76@gmail.com" method="post" enctype="text/plain">
-                                <label class="">Vaše ime:</label>
-                                <input id="ime" type="text" class="form-control" placeholder="Pera Perić">
-                                <p id="p1" class="alert alert-danger hidden" role="alert">
-                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                    <span class="sr-only">Greška:</span>
-                                </p>
-                                <label class="margin-20">Email:</label>
-                                <input id="email" type="email" class="form-control" placeholder="pera@peric.com">
-                                <p id="p2" class="alert alert-danger hidden" role="alert">
-                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                    <span class="sr-only">Greška:</span>
-                                </p>
-                                <label class="margin-20">Vaša poruka:</label>
-                                <textarea id="tekst-poruke" class="form-control" rows="3" placeholder="Tekst poruke."></textarea>
-                                <p id="p3" class="alert alert-danger hidden" role="alert">
-                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                    <span class="sr-only">Greška:</span>
-                                </p>
-                                <button type="button" id="submit-b" class="btn btn-default margin-20">Slanje</button>
+                            <form id="kontakt_form" action="" method="post">
+                                <fieldset>
+                                    <label for="ime" class="">Vaše ime:</label>
+                                    <input id="ime" name="ime" type="text" maxlength="50" class="form-control" placeholder="Pera Perić">
+                                    <p id="p1" class="alert alert-danger hidden" role="alert">
+                                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                        <span class="sr-only">Greška:</span><span id="p1Err">* Molio bih vas da koristite samo slova prilikom unosa vašeg imena. *</span>
+                                    </p>
+                                    <label for="email" class="margin-20">Email:</label>
+                                    <input id="email" name="email" type="email" maxlength="50" class="form-control" placeholder="pera@peric.com">
+                                    <p id="p2" class="alert alert-danger hidden" role="alert">
+                                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                        <span class="sr-only">Greška:</span><span id="p2Err">* Molio bih vas da unesete ispravnu email adresu. *</span>
+                                    </p>
+                                    <label for="tekst-poruke" class="margin-20">Vaša poruka:</label>
+                                    <textarea id="tekst-poruke" name="tekst-poruke" class="form-control" rows="2" placeholder="Tekst poruke."></textarea>
+                                    <input type="submit" id="submit-b" name="submit-b" class="btn btn-default margin-20" value="Slanje">
+                                    <p class="margin-20"></p>
+                                </fieldset>
                             </form>
                         </div>
                     </div>
+                </div>
+
+                <div class="debug hidden" id="debugDiv">
+                    Debug info: <span id="debugData"></span>
                 </div>
 
                 <div id="footer" class="mastfoot">
@@ -146,10 +145,6 @@
                         <p>Septembar 2016 - d00mil, odobrila i testirala - Katarina =)</p>
                         <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
                     </div>
-                </div>
-
-                <div class="debug hidden" id="debugDiv">
-                    Debug nfo: <span id="debugData"></span>
                 </div>
 
             </div>
