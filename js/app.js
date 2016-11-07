@@ -462,7 +462,7 @@ $(document).ready(function() {
         $("#submit-b")
             .val("Sačekajte...")
             .attr('disabled', 'disabled');
-            submitKlik();
+        submitKlik();
 
         return true;
     });
