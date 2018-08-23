@@ -427,7 +427,7 @@ $(document).ready(function() {
     $("#ime").keyup(function(event) {
         ime = $("#ime").val();
         if (event.which === 13) {
-            submitKlik()
+            submitKlik();
         } else {
             valIme();
         }
@@ -440,7 +440,7 @@ $(document).ready(function() {
     $("#email").keyup(function(event) {
         email = $("#email").val();
         if (event.which === 13) {
-            submitKlik()
+            submitKlik();
         } else {
             valEmail();
         }
@@ -453,7 +453,7 @@ $(document).ready(function() {
     $("#tekst-poruke").keyup(function(event) {
         if (event.which === 13) {
             event.preventDefault();
-            submitKlik()
+            submitKlik();
         }
     });
 
